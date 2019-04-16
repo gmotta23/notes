@@ -28,7 +28,7 @@ export default {
     }
   },
   methods: {
-    enableEdit(card) {
+    async enableEdit(card) {
       this.editing = true
       this.newCard = card
     },
@@ -36,10 +36,9 @@ export default {
       this.editing = false
     },
     async saveEdit(card) {
-      console.log(card)
-      console.log(this.newCard)
-      card = this.newCard
+      let index = await this.$store.getters.getNotes.indexOf(card)
       let array = await JSON.parse(localStorage.getItem('notesArray'))
+      array[index] = this.newCard
       localStorage.setItem('notesArray', JSON.stringify(array))
       this.$store.commit('updateNotesArray', array)
       this.editing = false
@@ -65,6 +64,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.card {
+  display: flex;
+  width: 15rem;
+}
 
 </style>
 

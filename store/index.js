@@ -24,9 +24,8 @@ const createStore = () => {
     },
     actions: {
       async addNote({state, commit}, newNote) {        
-        //pega o notesArray do localStorage pra dar um push e depois commit.
         let array = await JSON.parse(localStorage.getItem('notesArray'))
-
+        //caso localStorage nao tenha o array procurado, gera-se um
         if (!array) {
           array = []
         }
@@ -34,7 +33,7 @@ const createStore = () => {
           alert('Please insert a valid note.')
           return 0
         }
-        
+
         array.push(newNote)
         localStorage.setItem('notesArray', JSON.stringify(array))
         commit('updateNotesArray', array)
