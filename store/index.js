@@ -1,0 +1,47 @@
+import Vuex from 'vuex';
+import Vue from 'vue';
+
+Vue.use(Vuex);
+
+const createStore = () => {
+  return new Vuex.Store({
+    state: {
+      notesArray: JSON.parse(localStorage.getItem('notesArray'))
+    },
+    getters: {
+      getNotes (state) {
+        return state.notesArray
+      }
+    },
+    mutations: {
+      updateNotesArray(state, newArray) {
+        state.notesArray = newArray
+      },
+      deleteAll(state) {
+        localStorage.removeItem('notesArray')
+        state.notesArray = []
+      }
+    },
+    actions: {
+      async addNote({state, commit}, newNote) {        
+        //pega o notesArray do localStorage pra dar um push e depois commit.
+        let array = await JSON.parse(localStorage.getItem('notesArray'))
+
+        if (!array) {
+          array = []
+        }
+        if (newNote.length === 0 || array[array.length-1] === newNote) {
+          alert('Please insert a valid note.')
+          return 0
+        }
+        
+        array.push(newNote)
+        localStorage.setItem('notesArray', JSON.stringify(array))
+        commit('updateNotesArray', array)
+
+      }
+    }
+  })
+}
+
+export default createStore
